@@ -1,0 +1,6 @@
+<div>
+    <label for="cost">Enter House Cost:</label>
+    <input id="cost" [(ngModel)]="totCost.cost" placeholder="enter cost">
+</div>
+<h2>Total House Cost:</h2>
+<div>{{totCost.cost | currency}}</div>
