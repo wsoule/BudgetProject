@@ -1,6 +1,12 @@
 <div>
     <label for="cost">Enter House Cost:</label>
-    <input id="cost" [(ngModel)]="totCost.cost" placeholder="enter cost">
+    <!-- <input id="cost" [(ngModel)]="totCost.cost" placeholder="enter cost"> -->
+    <input id="cost" [formControl]="getControl('cost')" placeholder="enter cost">
 </div>
 <h2>Total House Cost:</h2>
-<div>{{totCost.cost | currency}}</div>
+<div *ngIf="!getControl('cost').errors">{{getControl('cost').value | currency}}</div>
+<div>
+    <div *ngIf="getControlError('cost', 'required')">Cost is required!</div>
+    <div *ngIf="getControlError('cost', 'min')">Cost must be over ${{getControl('cost').errors!['min'].min}}!</div>
+    <div *ngIf="getControlError('cost', 'max')">Cost cannot be this high!</div>
+</div>

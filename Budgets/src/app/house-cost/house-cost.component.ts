@@ -1,14 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { totHousePrice } from '../housePrice';
-// import {Form, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-// import {ErrorStateMatcher} from '@angular/material/core';
+import { TotHousePrice } from '../housePrice';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-// export class MyErrorStateMatcher implements ErrorStateMatcher{
-//   ifErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean{
-//     const isSubmitted = form && form.submitted;
-//     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-//   }
-// }
 
 @Component({
   selector: 'app-house-cost',
@@ -16,13 +9,35 @@ import { totHousePrice } from '../housePrice';
   styleUrls: ['./house-cost.component.css']
 })
 export class HouseCostComponent implements OnInit {
-  totCost: totHousePrice ={
-    cost: 1234,
-  };
-  constructor() { }
+  costForm: FormGroup<TotHousePrice>;
+  //how to have this empty?
+  // totCost: totHousePrice ={
+  //   cost: 100000
+  // };
+  constructor() {
+    this.costForm = new FormGroup({
+      cost: new FormControl<number | null>(
+        null,
+        [
+          Validators.required,
+          Validators.min(5),
+          Validators.max(10 ** 21)
+        ]
+      )
+    });
+   }
 
   ngOnInit(): void {
     
+  }
+
+  getControl(formKey: string): FormControl<any> {
+    return this.costForm.get(formKey) as FormControl<any>;
+  }
+
+  getControlError(formKey: string, errorKey: string): boolean {
+    const control = this.costForm.get(formKey) as FormControl<any>;
+    return (control.errors && control.errors[errorKey]) != null;
   }
 
 }
