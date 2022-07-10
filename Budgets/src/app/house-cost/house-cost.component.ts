@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TotHousePrice } from '../housePrice';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
+import { MatSliderChange } from '@angular/material/slider';
 
 @Component({
   selector: 'app-house-cost',
@@ -58,6 +58,14 @@ export class HouseCostComponent implements OnInit {
         emitEvent: false
       });
     })
+    this.costForm.get('dPayCost')?.valueChanges.subscribe((dPayCost) => {
+      const { cost } = this.costForm.value;
+      this.costForm.patchValue({
+        dPayPercent: this.fromPercentToDollar(dPayCost,cost ?? 0)
+      },{
+        emitEvent: false
+      });
+    })
   }
 
   getControl(formKey: string): FormControl<any> {
@@ -69,6 +77,24 @@ export class HouseCostComponent implements OnInit {
     return (control.errors && control.errors[errorKey]) != null;
   }
   toDollar(number: number):number {
-    return Math.floor(number * 100)/100
+    return Math.floor(number * 100)/100;
+  }
+
+  fromPercentToDollar(number1 : number | null,number2 : number | null):number{
+    if(!number2){
+      return 0;
+    }
+    return Math.floor((number1 ?? 0)/(number2)*10000)/100;
+  }
+  onPercentChange(event: MatSliderChange) {
+    this.costForm.patchValue({dPayPercent: event.value})
+  }
+  
+  formatLabel(value: number) {
+    if (value >= 0) {
+      return value+ '%';
+    }
+
+    return value;
   }
 }

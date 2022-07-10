@@ -1,22 +1,26 @@
 <div id="houseCostInput">
-Enter House Cost:
+Enter House Cost: $
     <input type="number" id="cost" [formControl]="getControl('cost')" placeholder="enter cost">
 </div>
 <div id="downPaymentPercent">
     Percent of down payment:
     <input type="number" [formControl]="getControl('dPayPercent')" placeholder="enter percent">
+    %
 </div>
 <div id="downPaymentCost">
-    Price of down payment:
+    Price of down payment: $
     <input type="number" [formControl]="getControl('dPayCost')" placeholder="enter amount">
 </div>
 <div id="downPaymentSlider">
-    <label for="dPayRange"></label>
-    <input type="range" id="dPayRange" name="dPayRange" [formControl]="getControl('dPayPercent')">
+    <!-- <label for="dPayRange"></label> -->
+    <mat-slider (input)="onPercentChange($event)" thumbLabel tickInterval="1" min="0" max="100" id="dPayRange" name="dPayRange" aria-label="units" [formControl]="getControl('dPayPercent')"></mat-slider>
+    <!-- <input type="range" id="dPayRange" name="dPayRange" [formControl]="getControl('dPayPercent')"> -->
 </div>
 {{getControl('dPayPercent').value}}
 <h2>Total House Cost:</h2>
 <div *ngIf="!getControl('cost').errors">{{getControl('cost').value | currency}}</div>
+<h3><br>Total Down Payment Cost:</h3>
+<div *ngIf="!getControl('dPayPercent').errors">{{getControl('dPayCost').value | currency}}</div>
 <div>
     <div *ngIf="getControlError('cost', 'required')">Cost is required!</div>
     <div *ngIf="getControlError('cost', 'min')">Cost must be over ${{getControl('cost').errors!['min'].min}}!</div>
